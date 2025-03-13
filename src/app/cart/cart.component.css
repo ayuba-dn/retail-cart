@@ -1,0 +1,8 @@
+.coupon-btn {
+  margin-top: 1rem;
+}
+
+.clear-coupon small {
+  cursor: pointer;
+  color: blue;
+}

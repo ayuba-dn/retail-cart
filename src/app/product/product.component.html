@@ -1,12 +1,11 @@
 <div class="card">
-  <img
-    class="card-img-top"
-    src="https://dummyimage.com/150x150/55595c/fff"
-    alt="Product Image"
-  />
+  <img class="card-img-top" [src]="product.thumbnail" alt="Product Image" />
   <div class="card-body text-center">
-    <h5 class="card-title">Product Name Titi</h5>
-    <p class="card-text">70,00 €</p>
-    <button class="btn btn-success">Add to Cart</button>
+    <h5 class="card-title">{{ product.title }}</h5>
+    <p class="card-text">{{ product.price }} $</p>
+    <p class="card-rating">Rating: {{ product.rating }} ⭐</p>
+    <button (click)="emitAddToCart()" class="btn btn-success">
+      Add to Cart
+    </button>
   </div>
 </div>
