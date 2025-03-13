@@ -1,32 +1,33 @@
 import { Inject, Injectable, InjectionToken, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
-import { Product } from '../models/product.model';
-
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, of, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { GetProductsResponse } from '../models/get-products-response.model';
+import { LoggingService } from './logging.service';
+import { EventCode } from '../models/event-code.enum';
 export const API_URL = new InjectionToken<string>('API_URL');
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductService {
-  readonly productSignal = signal<Product[]>([]);
-
   constructor(
     private http: HttpClient,
+    private loggingService: LoggingService,
     @Inject(API_URL) private apiUrl: string
-  ) {
-    this.loadProducts();
-  }
+  ) {}
 
-  private loadProducts() {
-    this.http
-      .get<{ products: Product[] }>(this.apiUrl)
-      .pipe(
-        tap((data) => {
-          console.log('data is>>>', data);
-          this.productSignal.set(data.products);
-        })
-      )
-      .subscribe();
+  public getProducts(): Observable<GetProductsResponse> {
+    return this.http.get<GetProductsResponse>(this.apiUrl).pipe(
+      catchError((error: HttpErrorResponse) => {
+        this.loggingService.logError(
+          error.message,
+          EventCode.PRODUCT_FETCH_FAILURE
+        );
+        return throwError(
+          () => new Error('Failed to fetch products. Please try again later.')
+        );
+      })
+    );
   }
 }
