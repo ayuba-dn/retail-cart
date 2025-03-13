@@ -1,14 +1,14 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ProductComponent } from '../product/product.component';
-import { API_URL, ProductService } from '../services/product.service';
+import { API_URL, ProductService } from '../../services/product.service';
 import { CommonModule } from '@angular/common';
-import { CartService } from '../services/cart-service.service';
-import { Product } from '../models/product.model';
+import { CartService } from '../../services/cart-service.service';
+import { Product } from '../../models/product.model';
 import { QuantityModalComponent } from '../quantity-modal/quantity-modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { LoggingService } from '../services/logging.service';
-import { EventCode } from '../models/event-code.enum';
-import { GetProductsResponse } from '../models/get-products-response.model';
+import { LoggingService } from '../../services/logging.service';
+import { EventCode } from '../../models/event-code.enum';
+import { GetProductsResponse } from '../../models/get-products-response.model';
 @Component({
   selector: 'app-product-list',
   standalone: true,

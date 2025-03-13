@@ -7,11 +7,13 @@ import {
   FormControl,
   FormsModule,
 } from '@angular/forms';
-import { CartService } from '../services/cart-service.service';
+import { CartService } from '../../services/cart-service.service';
 import { debounceTime } from 'rxjs/operators';
 import { RouterLink } from '@angular/router';
-import { EventCode } from '../models/event-code.enum';
-import { LoggingService } from '../services/logging.service';
+import { EventCode } from '../../models/event-code.enum';
+import { LoggingService } from '../../services/logging.service';
+import { Observable } from 'rxjs';
+import { CartItem } from '../../models/cart-item.model';
 
 @Component({
   selector: 'app-cart',
@@ -23,7 +25,7 @@ import { LoggingService } from '../services/logging.service';
 export class CartComponent {
   cartService = inject(CartService);
   loggingService = inject(LoggingService);
-  cartItems = this.cartService.getCartItems();
+  cartItems: Observable<CartItem[]> = this.cartService.getCartItems();
   cartForm: FormGroup;
   grandTotal: number = 0;
   discountCode: string = '';
