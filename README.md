@@ -43,7 +43,9 @@ Incorporate a CI command in your deployment pipeline to set thresholds for code 
 
 ## What Next
 
-1. **State Management**: As the application grows, implementing a state management solution like NgRx or Akita will help manage state in a more predictable and scalable way.
+These are just a few of the many good things we can add going forward to enhance the application:
+
+1. **State Management**: As the application grows, implementing a state management solution like the new NgRx Signal Store will help manage state in a more predictable and scalable way.
 
 2. **The Use of Signals**: Work has already begun on a branch called `signal-based-solution` to incorporate signals, which can enhance reactivity and performance.
 
@@ -52,6 +54,8 @@ Incorporate a CI command in your deployment pipeline to set thresholds for code 
 4. **Internalization**: Add support for multiple languages using a library like Transloco to make the application accessible to a wider audience.
 
 5. **Environment Variables**: Use environment variables to avoid hardcoded values and allow the injection of unique values per environment, such as API URLs.
+
+6. **Integration with External Logging and Monitoring Tools**: Currently, our logging service writes logs to the console. The plan is to integrate with providers like Datadog, AWS CloudWatch, etc., to enhance logging and monitoring capabilities.
 
 ## Further Help
 
