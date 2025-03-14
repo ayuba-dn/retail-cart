@@ -1,6 +1,6 @@
 # RetailCart
 
-This project is a simple retail application built with Angular.
+This project is a simple retail application built with Angular 18.
 
 ## Installation and Running the App
 
@@ -28,10 +28,6 @@ This project is a simple retail application built with Angular.
    ```
    Navigate to `http://localhost:4200/` to view the app. The application will automatically reload if you change any of the source files.
 
-## Code Scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
 ## Build
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
@@ -44,6 +40,18 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 ## Continuous Integration (CI)
 
 Incorporate a CI command in your deployment pipeline to set thresholds for code quality. This ensures that the codebase maintains high standards over time and prevents regressions. Consider using tools like [Jenkins](https://www.jenkins.io/) or [GitHub Actions](https://github.com/features/actions) to automate this process.
+
+## What Next
+
+1. **State Management**: As the application grows, implementing a state management solution like NgRx or Akita will help manage state in a more predictable and scalable way.
+
+2. **The Use of Signals**: Work has already begun on a branch called `signal-based-solution` to incorporate signals, which can enhance reactivity and performance.
+
+3. **Automation Testing**: Consider adding automation testing using tools like Cypress or Selenium to ensure the application functions correctly across different scenarios.
+
+4. **Internalization**: Add support for multiple languages using a library like Transloco to make the application accessible to a wider audience.
+
+5. **Environment Variables**: Use environment variables to avoid hardcoded values and allow the injection of unique values per environment, such as API URLs.
 
 ## Further Help
 
