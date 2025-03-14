@@ -34,4 +34,7 @@ export enum EventCode {
   // Discount Events
   DISCOUNT_APPLIED = 'EVT_DISCOUNT_APPLIED',
   DISCOUNT_RESET = 'EVT_DISCOUNT_RESET',
+
+  // Search Events
+  SEARCH_QUERY_SUBMITTED = 'EVT_SEARCH_QUERY_SUBMITTED',
 }

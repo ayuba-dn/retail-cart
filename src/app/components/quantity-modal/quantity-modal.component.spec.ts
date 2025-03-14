@@ -28,4 +28,11 @@ describe('QuantityModalComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('handleAddToCart should call active modal close method', () => {
+    const mockActiveModal = jasmine.createSpyObj('NgbActiveModal', ['close']);
+    component.activeModal = mockActiveModal;
+    component.handleAddToCart();
+    expect(mockActiveModal.close).toHaveBeenCalledWith(1);
+  });
 });

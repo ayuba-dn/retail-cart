@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ReactiveFormsModule,
@@ -7,12 +7,12 @@ import {
   FormControl,
   FormsModule,
 } from '@angular/forms';
-import { CartService } from '../../services/cart-service.service';
-import { debounceTime } from 'rxjs/operators';
+import { CartService } from '../../services/cart.service';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 import { RouterLink } from '@angular/router';
 import { EventCode } from '../../models/event-code.enum';
 import { LoggingService } from '../../services/logging.service';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { CartItem } from '../../models/cart-item.model';
 
 @Component({
@@ -22,18 +22,22 @@ import { CartItem } from '../../models/cart-item.model';
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.css',
 })
-export class CartComponent {
+export class CartComponent implements OnDestroy, OnInit {
   cartService = inject(CartService);
   loggingService = inject(LoggingService);
+
   cartItems: Observable<CartItem[]> = this.cartService.getCartItems();
   cartForm: FormGroup;
   grandTotal: number = 0;
   discountCode: string = '';
   discountError: string | null = null;
   discountApplied: boolean = false;
-
+  private destroy$ = new Subject<void>();
   constructor(private fb: FormBuilder) {
     this.cartForm = this.fb.group({});
+  }
+
+  ngOnInit(): void {
     this.cartItems.subscribe((items) => {
       this.grandTotal = items.reduce(
         (total: number, item: any) => total + item.price * item.quantity,
@@ -41,11 +45,13 @@ export class CartComponent {
       );
       items.forEach((item) => {
         const control = this.fb.control(item.quantity);
-        control.valueChanges.pipe(debounceTime(300)).subscribe((quantity) => {
-          if (typeof quantity === 'number') {
-            this.cartService.updateItemQuantity(item.id, quantity);
-          }
-        });
+        control.valueChanges
+          .pipe(debounceTime(300), takeUntil(this.destroy$))
+          .subscribe((quantity) => {
+            if (typeof quantity === 'number') {
+              this.cartService.updateItemQuantity(item.id, quantity);
+            }
+          });
         this.cartForm.addControl(item.id, control);
       });
     });
@@ -66,6 +72,7 @@ export class CartComponent {
 
   applyDiscount() {
     if (this.discountCode === 'SAVE10') {
+      //Todo: coupon codes would come from database/server
       this.grandTotal *= 0.9;
       this.discountApplied = true;
       this.loggingService.logSuccess(
@@ -82,5 +89,10 @@ export class CartComponent {
     this.discountApplied = false;
     this.discountError = null;
     this.loggingService.logSuccess(`Discount reset`, EventCode.DISCOUNT_RESET);
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CartComponent } from './cart.component';
 import { ActivatedRoute } from '@angular/router';
-import { CartService } from '../../services/cart-service.service';
+import { CartService } from '../../services/cart.service';
 import { of } from 'rxjs';
 
 describe('CartComponent', () => {
@@ -27,6 +27,7 @@ describe('CartComponent', () => {
 
     fixture = TestBed.createComponent(CartComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
   });
 
@@ -66,5 +67,24 @@ describe('CartComponent', () => {
     expect(component.discountCode).toEqual('');
     expect(component.discountApplied).toEqual(false);
     expect(component.discountError).toEqual(null);
+  });
+
+  it('should unsubscribe from all subscriptions when destroyed', () => {
+    const spy = spyOn(component['destroy$'], 'next');
+    component.ngOnDestroy();
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('getFormControl should return the correct form control', () => {
+    const formControl = component.getFormControl('1');
+    expect(formControl).toBeDefined();
+  });
+
+  it('formControl should be created for each cart item', () => {
+    component.cartItems = of([
+      { id: '1', name: 'Test Product', price: 100, quantity: 1 },
+    ]);
+    component.ngOnInit();
+    expect(component.cartForm.contains('1')).toBeTruthy();
   });
 });

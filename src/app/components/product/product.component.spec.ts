@@ -6,7 +6,6 @@ describe('ProductComponent', () => {
   let component: ProductComponent;
   let fixture: ComponentFixture<ProductComponent>;
 
-  // Define a mock product
   const mockProduct: Product = {
     id: 1,
     title: 'Test Product',
@@ -15,7 +14,6 @@ describe('ProductComponent', () => {
     category: 'Test Category',
     rating: 4.5,
     thumbnail: 'test-image.jpg',
-    // Add other fields as necessary
   };
 
   beforeEach(async () => {
@@ -36,5 +34,9 @@ describe('ProductComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  // Add more tests as needed
+  it('emitAddToCart should emit addToCart event with current product', () => {
+    const spy = spyOn(component.addToCart, 'emit');
+    component.emitAddToCart();
+    expect(spy).toHaveBeenCalledWith(mockProduct);
+  });
 });

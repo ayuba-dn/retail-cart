@@ -3,7 +3,7 @@ import { ProductListComponent } from './product-list.component';
 import { ProductService } from '../../services/product.service';
 import { LoggingService } from '../../services/logging.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { CartService } from '../../services/cart-service.service';
+import { CartService } from '../../services/cart.service';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { of, throwError } from 'rxjs';
@@ -22,7 +22,7 @@ describe('ProductListComponent', () => {
   );
   let loggingServiceMock: jasmine.SpyObj<LoggingService> = jasmine.createSpyObj(
     'LoggingService',
-    ['logSuccess']
+    ['logSuccess', 'logError']
   );
   let modalServiceMock: jasmine.SpyObj<NgbModal> = jasmine.createSpyObj(
     'NgbModal',
@@ -92,5 +92,57 @@ describe('ProductListComponent', () => {
     productServiceMock.getProducts.and.returnValue(of(mockProducts));
     component.ngOnInit();
     expect(component.products).toEqual(mockProducts.products);
+  });
+
+  it('should filter products', () => {
+    component.filterProducts('Test');
+    expect(component.filteredProducts).toEqual(mockProducts.products);
+  });
+
+  it('should track product by id', () => {
+    const product = mockProducts.products[0];
+    const index = 0;
+    const result = component.trackByProductId(index, product);
+    expect(result).toEqual(product.id);
+  });
+
+  it('should handle add to cart', () => {
+    const product = mockProducts.products[0];
+    component.handleAddToCart(product);
+    expect(modalServiceMock.open).toHaveBeenCalled();
+  });
+
+  it('should handle search', () => {
+    component.searchForm.setValue({ searchQuery: 'Test' });
+    component.filterProducts('Test');
+    expect(component.filteredProducts).toEqual(mockProducts.products);
+  });
+
+  it('should handle product fetching error', () => {
+    productServiceMock.getProducts.and.returnValue(
+      throwError(() => new Error())
+    );
+
+    component.productService.getProducts().subscribe({
+      error: () => {
+        expect(component.errorFetchingProducts).toBe(
+          'There was an error fetching the products. Please try again later.'
+        );
+        expect(component.productsLoading).toBeFalse();
+      },
+    });
+  });
+
+  it('should unsubscribe from all subscriptions when destroyed', () => {
+    const spy = spyOn(component['destroy$'], 'next');
+    component.ngOnDestroy();
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('filterProducts should be called when searchForm value changes', async () => {
+    const spy = spyOn(component, 'filterProducts');
+    component.searchForm.setValue({ searchQuery: 'Test' });
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    expect(spy).toHaveBeenCalledWith('Test');
   });
 });
