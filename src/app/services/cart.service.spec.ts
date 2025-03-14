@@ -1,11 +1,11 @@
-import { inject, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { CartService } from './cart.service';
 import { CartItem } from '../models/cart-item.model';
 
 describe('CartService', () => {
   let service: CartService;
   let mockCartItem: CartItem;
-  let store: { [key: string]: string } = {};
+  let store: Record<string, string> = {};
 
   const localStorageMock = {
     getItem: (key: string): string | null => {

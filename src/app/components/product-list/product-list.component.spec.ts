@@ -12,19 +12,19 @@ import { GetProductsResponse } from '../../models/get-products-response.model';
 describe('ProductListComponent', () => {
   let component: ProductListComponent;
   let fixture: ComponentFixture<ProductListComponent>;
-  let productServiceMock: jasmine.SpyObj<ProductService> = jasmine.createSpyObj(
+  const productServiceMock: jasmine.SpyObj<ProductService> = jasmine.createSpyObj(
     'ProductService',
     ['getProducts']
   );
-  let cartServiceMock: jasmine.SpyObj<CartService> = jasmine.createSpyObj(
+  const cartServiceMock: jasmine.SpyObj<CartService> = jasmine.createSpyObj(
     'CartService',
     ['getCartItems', 'addItem']
   );
-  let loggingServiceMock: jasmine.SpyObj<LoggingService> = jasmine.createSpyObj(
+  const loggingServiceMock: jasmine.SpyObj<LoggingService> = jasmine.createSpyObj(
     'LoggingService',
     ['logSuccess', 'logError']
   );
-  let modalServiceMock: jasmine.SpyObj<NgbModal> = jasmine.createSpyObj(
+  const modalServiceMock: jasmine.SpyObj<NgbModal> = jasmine.createSpyObj(
     'NgbModal',
     ['open']
   );
@@ -38,7 +38,7 @@ describe('ProductListComponent', () => {
 
   modalServiceMock.open.and.returnValue(mockModalRef as NgbModalRef);
 
-  let httpClientMock: jasmine.SpyObj<HttpClient> = jasmine.createSpyObj(
+  const httpClientMock: jasmine.SpyObj<HttpClient> = jasmine.createSpyObj(
     'HttpClient',
     ['get']
   );

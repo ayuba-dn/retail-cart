@@ -5,18 +5,15 @@ import { LoggingService } from '../../services/logging.service';
 import { ActivatedRoute } from '@angular/router';
 import { CartService } from '../../services/cart.service';
 import { of } from 'rxjs';
-import { CartItem } from '../../models/cart-item.model';
 
 describe('NavbarComponent', () => {
   let component: NavbarComponent;
   let fixture: ComponentFixture<NavbarComponent>;
 
-  let loggingServiceMock: jasmine.SpyObj<LoggingService> = jasmine.createSpyObj(
-    'LoggingService',
-    ['logSuccess']
-  );
+  const loggingServiceMock: jasmine.SpyObj<LoggingService> =
+    jasmine.createSpyObj('LoggingService', ['logSuccess']);
 
-  let cartServiceMock: jasmine.SpyObj<CartService> = jasmine.createSpyObj(
+  const cartServiceMock: jasmine.SpyObj<CartService> = jasmine.createSpyObj(
     'CartService',
     ['getCartItems']
   );

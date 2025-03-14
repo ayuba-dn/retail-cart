@@ -6,7 +6,7 @@ import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 describe('QuantityModalComponent', () => {
   let component: QuantityModalComponent;
   let fixture: ComponentFixture<QuantityModalComponent>;
-  let modalServiceMock: jasmine.SpyObj<NgbModal> = jasmine.createSpyObj(
+  const modalServiceMock: jasmine.SpyObj<NgbModal> = jasmine.createSpyObj(
     'NgbModal',
     ['open']
   );

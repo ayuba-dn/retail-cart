@@ -28,10 +28,10 @@ export class CartComponent implements OnDestroy, OnInit {
 
   cartItems: Observable<CartItem[]> = this.cartService.getCartItems();
   cartForm: FormGroup;
-  grandTotal: number = 0;
-  discountCode: string = '';
+  grandTotal = 0;
+  discountCode = '';
   discountError: string | null = null;
-  discountApplied: boolean = false;
+  discountApplied = false;
   private destroy$ = new Subject<void>();
   constructor(private fb: FormBuilder) {
     this.cartForm = this.fb.group({});
@@ -40,7 +40,7 @@ export class CartComponent implements OnDestroy, OnInit {
   ngOnInit(): void {
     this.cartItems.subscribe((items) => {
       this.grandTotal = items.reduce(
-        (total: number, item: any) => total + item.price * item.quantity,
+        (total: number, item: CartItem) => total + item.price * item.quantity,
         0
       );
       items.forEach((item) => {

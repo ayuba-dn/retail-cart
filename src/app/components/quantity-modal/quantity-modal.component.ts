@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
   imports: [CommonModule, FormsModule],
 })
 export class QuantityModalComponent {
-  @Input() quantity: number = 1;
+  @Input() quantity = 1;
 
   constructor(public activeModal: NgbActiveModal) {}
   handleAddToCart() {

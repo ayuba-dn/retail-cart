@@ -6,7 +6,7 @@ import { Observable, of, throwError } from 'rxjs';
 
 describe('ProductService', () => {
   let service: ProductService;
-  let httpClientMock: jasmine.SpyObj<HttpClient> = jasmine.createSpyObj(
+  const httpClientMock: jasmine.SpyObj<HttpClient> = jasmine.createSpyObj(
     'HttpClient',
     ['get']
   );

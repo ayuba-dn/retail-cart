@@ -7,7 +7,7 @@ export class LoggingService {
   //Added for demo purposes, real implementation should send logs to a remote server
   logSuccess(message: string, eventCode: EventCode) {
     console.log(
-      '%c🚀 Success:',
+      'Success:',
       'color: green; font-weight: bold;',
       eventCode,
       message
@@ -16,7 +16,7 @@ export class LoggingService {
 
   logWarning(message: string, eventCode: EventCode) {
     console.log(
-      '%c⚠️ Warning:',
+      'Warning:',
       'color: orange; font-weight: bold;',
       eventCode,
       message
@@ -24,11 +24,6 @@ export class LoggingService {
   }
 
   logError(message: string, eventCode: EventCode) {
-    console.log(
-      '%c❌ Error:',
-      'color: red; font-weight: bold;',
-      eventCode,
-      message
-    );
+    console.log('Error:', 'color: red; font-weight: bold;', eventCode, message);
   }
 }

@@ -1,12 +1,34 @@
 # RetailCart
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.0.3.
+This project is a simple retail application built with Angular.
 
-## Development server
+## Installation and Running the App
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+1. **Clone the repository**:
 
-## Code scaffolding
+   ```bash
+   git clone <repository-url>
+   ```
+
+2. **Navigate to the project directory**:
+
+   ```bash
+   cd retail-cart
+   ```
+
+3. **Install dependencies**:
+
+   ```bash
+   npm install
+   ```
+
+4. **Run the development server**:
+   ```bash
+   ng serve
+   ```
+   Navigate to `http://localhost:4200/` to view the app. The application will automatically reload if you change any of the source files.
+
+## Code Scaffolding
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
@@ -14,14 +36,15 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
-## Running unit tests
+## Running Linting and Tests
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+- **Linting**: Run `ng lint` to execute the linter and ensure code quality.
+- **Unit Tests**: Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Running end-to-end tests
+## Continuous Integration (CI)
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Incorporate a CI command in your deployment pipeline to set thresholds for code quality. This ensures that the codebase maintains high standards over time and prevents regressions. Consider using tools like [Jenkins](https://www.jenkins.io/) or [GitHub Actions](https://github.com/features/actions) to automate this process.
 
-## Further help
+## Further Help
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+To get more help on the Angular CLI, use `ng help` or check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
