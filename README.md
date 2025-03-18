@@ -24,7 +24,7 @@ This project is a simple retail application built with Angular 18.
 
 4. **Run the development server**:
    ```bash
-   ng serve
+   npm run start
    ```
    Navigate to `http://localhost:4200/` to view the app. The application will automatically reload if you change any of the source files.
 
@@ -34,12 +34,10 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 
 ## Running Linting and Tests
 
-- **Linting**: Run `ng lint` to execute the linter and ensure code quality.
-- **Unit Tests**: Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+- **Linting**: Run `npm run lint` to execute the linter and ensure code quality.
+- **Unit Tests**: Run `npm run test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
 ## Continuous Integration (CI)
-
-Incorporate a CI command in your deployment pipeline to set thresholds for code quality. This ensures that the codebase maintains high standards over time and prevents regressions. Consider using tools like [Jenkins](https://www.jenkins.io/) or [GitHub Actions](https://github.com/features/actions) to automate this process.
 
 Running the command:
 
@@ -47,7 +45,21 @@ Running the command:
 npm run ci
 ```
 
-will execute linting and code coverage checks respectively, ensuring that the code meets quality standards before deployment.
+will execute linting and code coverage checks, providing visibility into code quality and ensuring that the code meets quality standards before deployment.
+
+Can be incorporated into deployment pipeline to set thresholds for code quality. This ensures that the codebase maintains high standards over time and prevents regressions.
+
+## Running Tests with Code Coverage
+
+To run tests with code coverage, use the following command:
+
+```bash
+npm run test:coverage
+```
+
+This will execute the unit tests and generate a code coverage report, which can be found in the `coverage/` directory. Reviewing the code coverage report helps ensure that your tests cover a significant portion of the codebase, highlighting areas that may need additional testing.
+
+A minimum code coverage threshold of 90% is currently being used to maintain high standards of code quality.
 
 ## What Next
 
