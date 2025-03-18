@@ -19,7 +19,8 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let product of cartItems | async">
+              @for (product of cartItems | async; track product.id) {
+              <tr>
                 <td>{{ product.name }}</td>
                 <td>{{ product.price }}</td>
                 <td>
@@ -42,7 +43,7 @@
                   </button>
                 </td>
               </tr>
-
+              }
               <tr>
                 <td></td>
                 <td></td>
@@ -63,10 +64,12 @@
                       placeholder="Enter coupon code"
                       formControlName="discountCode"
                     />
-                    <div *ngIf="discountError" class="text-danger">
+                    @if (discountError) {
+                    <div class="text-danger">
                       {{ discountError }}
                     </div>
-                    <div *ngIf="discountSuccessMessage" class="text-success">
+                    } @if (discountSuccessMessage) {
+                    <div class="text-success">
                       {{ discountSuccessMessage }}
                       <button
                         class="btn btn-link p-0 ml-2"
@@ -77,6 +80,7 @@
                         <i class="fa fa-times"></i>
                       </button>
                     </div>
+                    }
                     <button
                       class="btn btn-primary btn-sm coupon-btn"
                       type="submit"
