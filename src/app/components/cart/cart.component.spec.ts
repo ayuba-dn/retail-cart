@@ -1,9 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { CartComponent } from './cart.component';
 import { ActivatedRoute } from '@angular/router';
 import { CartService } from '../../services/cart.service';
 import { of } from 'rxjs';
+import { ReactiveFormsModule } from '@angular/forms';
 
 describe('CartComponent', () => {
   let component: CartComponent;
@@ -13,9 +13,10 @@ describe('CartComponent', () => {
     ['getCartItems', 'removeItem']
   );
   cartServiceMock.getCartItems.and.returnValue(of([]));
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CartComponent],
+      imports: [CartComponent, ReactiveFormsModule],
       providers: [
         { provide: ActivatedRoute, useValue: {} },
         {
@@ -27,7 +28,6 @@ describe('CartComponent', () => {
 
     fixture = TestBed.createComponent(CartComponent);
     component = fixture.componentInstance;
-
     fixture.detectChanges();
   });
 
@@ -37,7 +37,6 @@ describe('CartComponent', () => {
 
   it('should show cart items', () => {
     component.cartItems.subscribe((items) => {
-      console.log(items);
       expect(items).toEqual([]);
     });
   });
@@ -47,24 +46,28 @@ describe('CartComponent', () => {
     expect(cartServiceMock.removeItem).toHaveBeenCalledWith('1');
   });
 
-  it('discount should be applied if coupon code SAVE10', () => {
-    component.discountCode = 'SAVE10';
+  it('should apply discount if coupon code SAVE10', () => {
+    component.discountForm.get('discountCode')?.setValue('SAVE10');
     component.grandTotal = 100;
     component.applyDiscount();
     expect(component.grandTotal).toEqual(90);
+    expect(component.discountSuccessMessage).toContain(
+      '10.00% Discount applied'
+    );
   });
 
-  it('discount should not be applied if coupon code is not SAVE10', () => {
-    component.discountCode = 'WRONGCODE';
+  it('should not apply discount if coupon code is not SAVE10', () => {
+    component.discountForm.get('discountCode')?.setValue('WRONGCODE');
     component.grandTotal = 100;
     component.applyDiscount();
     expect(component.grandTotal).toEqual(100);
+    expect(component.discountError).toEqual('Invalid discount code');
   });
 
   it('should reset discount', () => {
-    component.discountCode = 'SAVE10';
-    component.resetDiscount();
-    expect(component.discountCode).toEqual('');
+    component.discountForm.get('discountCode')?.setValue('SAVE10');
+    component.cancelDiscount();
+    expect(component.discountForm.get('discountCode')?.value).toEqual(null);
     expect(component.discountApplied).toEqual(false);
     expect(component.discountError).toEqual(null);
   });
@@ -86,5 +89,12 @@ describe('CartComponent', () => {
     ]);
     component.ngOnInit();
     expect(component.cartForm.contains('1')).toBeTruthy();
+  });
+
+  it('should not apply the same coupon code twice', () => {
+    component.discountForm.get('discountCode')?.setValue('SAVE10');
+    component.applyDiscount();
+    component.applyDiscount(); // Try to apply again
+    expect(component.discountError).toEqual('Coupon code already applied');
   });
 });

@@ -41,6 +41,14 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 
 Incorporate a CI command in your deployment pipeline to set thresholds for code quality. This ensures that the codebase maintains high standards over time and prevents regressions. Consider using tools like [Jenkins](https://www.jenkins.io/) or [GitHub Actions](https://github.com/features/actions) to automate this process.
 
+Running the command:
+
+```bash
+npm run ci
+```
+
+will execute linting and code coverage checks respectively, ensuring that the code meets quality standards before deployment.
+
 ## What Next
 
 These are just a few of the many good things we can add going forward to enhance the application:

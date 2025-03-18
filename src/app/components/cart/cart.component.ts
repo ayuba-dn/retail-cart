@@ -6,6 +6,7 @@ import {
   FormBuilder,
   FormControl,
   FormsModule,
+  Validators,
 } from '@angular/forms';
 import { CartService } from '../../services/cart.service';
 import { debounceTime, takeUntil } from 'rxjs/operators';
@@ -26,15 +27,22 @@ export class CartComponent implements OnDestroy, OnInit {
   cartService = inject(CartService);
   loggingService = inject(LoggingService);
 
-  cartItems: Observable<CartItem[]> = this.cartService.getCartItems();
   cartForm: FormGroup;
+  discountForm: FormGroup;
   grandTotal = 0;
-  discountCode = '';
   discountError: string | null = null;
+  discountSuccessMessage: string | null = null;
   discountApplied = false;
+  couponCodesApplied = new Map<string, boolean>();
+
+  cartItems: Observable<CartItem[]> = this.cartService.getCartItems();
   private destroy$ = new Subject<void>();
+
   constructor(private fb: FormBuilder) {
     this.cartForm = this.fb.group({});
+    this.discountForm = this.fb.group({
+      discountCode: ['', Validators.required],
+    });
   }
 
   ngOnInit(): void {
@@ -55,6 +63,19 @@ export class CartComponent implements OnDestroy, OnInit {
         this.cartForm.addControl(item.id, control);
       });
     });
+
+    const storedDiscountCode = localStorage.getItem('discountCode');
+    if (storedDiscountCode && this.isValidDiscountCode(storedDiscountCode)) {
+      this.discountForm.get('discountCode')?.setValue(storedDiscountCode);
+      this.applyValidDiscount();
+    }
+
+    this.discountForm.get('discountCode')?.valueChanges.subscribe(() => {
+      this.clearError();
+      if (this.discountApplied) {
+        this.discountApplied = false;
+      }
+    });
   }
 
   removeItem(itemId: string) {
@@ -71,24 +92,66 @@ export class CartComponent implements OnDestroy, OnInit {
   }
 
   applyDiscount() {
-    if (this.discountCode === 'SAVE10') {
-      //Todo: coupon codes would come from database/server
-      this.grandTotal *= 0.9;
-      this.discountApplied = true;
-      this.loggingService.logSuccess(
-        `Discount applied: ${this.discountCode}`,
-        EventCode.DISCOUNT_APPLIED
-      );
+    const discountCode = this.discountForm.get('discountCode')?.value;
+    if (this.isValidDiscountCode(discountCode)) {
+      if (!this.couponCodesApplied.has(discountCode)) {
+        this.applyValidDiscount();
+        this.saveAppliedDiscount(discountCode);
+        this.couponCodesApplied.set(discountCode, true);
+      } else {
+        this.discountError = 'Coupon code already applied';
+      }
     } else {
-      this.discountError = 'Invalid discount code';
+      this.handleInvalidDiscount();
     }
   }
 
-  resetDiscount() {
-    this.discountCode = '';
-    this.discountApplied = false;
+  private isValidDiscountCode(code: string): boolean {
+    return code === 'SAVE10';
+  }
+
+  private applyValidDiscount() {
+    const originalTotal = this.grandTotal;
+    this.grandTotal *= 0.9;
+    this.discountApplied = true;
+    const discountPercentage = this.calculateDiscountPercentage(originalTotal);
+    this.discountSuccessMessage = `${discountPercentage}% Discount applied`;
+    this.loggingService.logSuccess(
+      `Discount applied: SAVE10`,
+      EventCode.DISCOUNT_APPLIED
+    );
+  }
+
+  private calculateDiscountPercentage(originalTotal: number): string {
+    const discountPercentage =
+      ((originalTotal - this.grandTotal) / originalTotal) * 100;
+    return discountPercentage.toFixed(2);
+  }
+
+  private handleInvalidDiscount() {
+    this.discountForm.reset();
+    this.discountError = 'Invalid discount code';
+    this.discountSuccessMessage = null;
+  }
+
+  private saveAppliedDiscount(discountCode: string) {
+    localStorage.setItem('discountCode', discountCode);
+  }
+
+  clearError() {
     this.discountError = null;
-    this.loggingService.logSuccess(`Discount reset`, EventCode.DISCOUNT_RESET);
+  }
+
+  cancelDiscount() {
+    this.discountForm.reset();
+    this.discountApplied = false;
+    this.discountSuccessMessage = null;
+    this.discountError = null;
+    localStorage.removeItem('discountCode');
+    this.loggingService.logSuccess(
+      'Discount cancelled',
+      EventCode.DISCOUNT_CANCELLED
+    );
   }
 
   ngOnDestroy(): void {

@@ -56,31 +56,38 @@
               <tr>
                 <td colspan="5"></td>
                 <td class="text-right">
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="Enter coupon code"
-                    [(ngModel)]="discountCode"
-                  />
-                  <div *ngIf="discountError" class="text-danger">
-                    {{ discountError }}
-                  </div>
-                  <button
-                    class="btn btn-primary btn-sm coupon-btn"
-                    (click)="applyDiscount()"
-                    [disabled]="discountApplied || discountCode.length === 0"
-                  >
-                    Apply Coupon
-                  </button>
-                  <div class="text-right mt-1 clear-coupon">
+                  <form [formGroup]="discountForm" (ngSubmit)="applyDiscount()">
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Enter coupon code"
+                      formControlName="discountCode"
+                    />
+                    <div *ngIf="discountError" class="text-danger">
+                      {{ discountError }}
+                    </div>
+                    <div *ngIf="discountSuccessMessage" class="text-success">
+                      {{ discountSuccessMessage }}
+                      <button
+                        class="btn btn-link p-0 ml-2"
+                        (click)="cancelDiscount()"
+                        aria-label="Cancel Discount"
+                        type="button"
+                      >
+                        <i class="fa fa-times"></i>
+                      </button>
+                    </div>
                     <button
-                      class="btn btn-link p-0"
-                      (click)="resetDiscount()"
-                      type="button"
+                      class="btn btn-primary btn-sm coupon-btn"
+                      type="submit"
+                      [disabled]="
+                        discountApplied ||
+                        discountForm.get('discountCode')?.invalid
+                      "
                     >
-                      Clear Coupon
+                      Apply Coupon
                     </button>
-                  </div>
+                  </form>
                 </td>
               </tr>
             </tbody>
